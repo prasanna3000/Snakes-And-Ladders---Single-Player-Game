@@ -1,38 +1,87 @@
+body {
+  /* overflow: hidden; */
+}
 .App {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.board {
   text-align: center;
+  background-image: url('./images/Snakes_mat.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  min-height: 80vh;
+  margin: 1vh auto;
+  min-width: 40%;
+  /* border: 5px solid gray; */
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.dice {
+  width: 40%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+.rollDice {
+  text-align: center;
+  margin-top: 2vh;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-bottom: 0;
+  align-self: flex-start;
+  min-height: 20vh;
+  /* border: 5px solid black; */
+}
+.rollDice button, button {
+  margin: 1% auto;
+  font-size: 25px;
+  background-color: #4CAF50;
+  border: none;
   color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
 }
-
-.App-link {
-  color: #61dafb;
+.successMessage {
+  color: green;
+  text-align: center;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.errorMessage {
+  color: red;
+  text-align: center;
+}
+.infoMessage {
+  color: #114B71;
+  text-align: center;
+}
+.diceElement {
+  /* border: 5px solid yellow; */
+  min-width: 200px;
+  min-height: 200px;
+  margin: 0vh 1vw;
+}
+.gridRow {
+  color: blueviolet;
+  display: flex;
+  flex-direction: column;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+.gridColumn {
+  display: flex;
+  flex-direction: row;
+  color: blue;
+}
+.gridCell {
+  /* border: 1px solid black; */
+  color: blue;
+  width: 60px;
+  height: 62px;
+}
+.centreAlignDiv {
+  text-align: center;
 }
