@@ -5,7 +5,11 @@ import StaticDice from './images/static-dice-icon.jpg'
 import toast, { Toaster } from 'react-hot-toast';
 import {
   GRID_SIZE,
+  snakePositions,
+  ladderPositions,
   defaultPositionMessage,
+  ladderMessage,
+  snakeMessage,
 } from './config/globalConfig';
 import {
   getRandomDiceValue,
@@ -16,9 +20,10 @@ import { useState } from 'react';
 
 function App() {
   const [position, setPosition] = useState(0);
-  const [isDiceRolling, toggleDiceRollingStatus] = useState(false);
+  // const [isDiceRolling, toggleDiceRollingStatus] = useState(false);
   const [currentDiceValue, setCurrentDiceValue] = useState(0);
   const [positionMessage, setPositionMessage] = useState();
+  const [snakeOrLadder, setSnakeOrLadder] = useState('');
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [hasGameEnded, setHasGameEnded] = useState(false);
 
@@ -29,11 +34,11 @@ function App() {
     color: '#fff',
   };
   function toggleDiceRoll(status) {
-    toggleDiceRollingStatus(status);
+    // toggleDiceRollingStatus(status);
     const image = document.getElementById('diceImage');
     image.src = RollingDice;
     setTimeout(() => {
-      toggleDiceRollingStatus(false);
+      // toggleDiceRollingStatus(false);
       const diceValue = getRandomDiceValue();
       if (diceValue === 6 && !isGameStarted) {
         setIsGameStarted(true);
@@ -70,7 +75,33 @@ function App() {
             return;
           }
           setPosition(latestPosition);
-          setPositionMessage('');
+          if (ladderPositions[latestPosition]) {
+            toast('You have reached the ladder', {
+              icon: '🪜',
+              style: styles,
+            });
+            setSnakeOrLadder('LADDER');
+            let message = ladderMessage;
+            message = message.replace(/<step1>/g, latestPosition);
+            latestPosition = ladderPositions[latestPosition];
+            setPosition(latestPosition);
+            message = message.replace(/<step2>/g, latestPosition);
+            setPositionMessage(message);
+          } else if (snakePositions[latestPosition]) {
+            toast('You got bit by Snake', {
+              icon: '🐍',
+              style: styles,
+            });
+            setSnakeOrLadder('SNAKE');
+            let message = snakeMessage;
+            message = message.replace(/<step1>/g, latestPosition);
+            latestPosition = snakePositions[latestPosition];
+            setPosition(latestPosition);
+            message = message.replace(/<step2>/g, latestPosition);
+            setPositionMessage(message);
+          } else {
+            setPositionMessage('');
+          }
         }
       }
         setCurrentDiceValue(diceValue);
@@ -128,6 +159,10 @@ function App() {
             :
             <h4 className='infoMessage'>{defaultPositionMessage}</h4>
           }
+          {snakeOrLadder ?
+            <h4 className={snakeOrLadder === 'SNAKE' ? 'errorMessage' : 'successMessage'}>{positionMessage}</h4>
+            :
+            null}
           {currentDiceValue === 6 ? <h1 className='successMessage'>Hurray!! 6 it is</h1> : null}
           {hasGameEnded ?
             <div className='centreAlignDiv'>
