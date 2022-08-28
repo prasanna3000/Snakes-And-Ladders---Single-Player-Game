@@ -1,8 +1,15 @@
 import './App.css';
+import React from 'react';
 import CreateGrid from './components/CreateGrid';
 import RollingDice from './images/dice.gif';
 import StaticDice from './images/static-dice-icon.jpg'
 import toast, { Toaster } from 'react-hot-toast';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import {
   GRID_SIZE,
   snakePositions,
@@ -21,11 +28,13 @@ import { useState } from 'react';
 function App() {
   const [position, setPosition] = useState(0);
   // const [isDiceRolling, toggleDiceRollingStatus] = useState(false);
+  const [isCrookedDiceSelected, setIsCrookedDiceSelected] = useState(false);
   const [currentDiceValue, setCurrentDiceValue] = useState(0);
   const [positionMessage, setPositionMessage] = useState();
   const [snakeOrLadder, setSnakeOrLadder] = useState('');
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [hasGameEnded, setHasGameEnded] = useState(false);
+  const [open, setOpen] = useState(true);
 
   // handlers
   const styles = {
@@ -33,13 +42,23 @@ function App() {
     background: '#333',
     color: '#fff',
   };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function toggleIsCrookedDiceSelected(status) {
+    setIsCrookedDiceSelected(status);
+    handleClose();
+  }
+
   function toggleDiceRoll(status) {
     // toggleDiceRollingStatus(status);
     const image = document.getElementById('diceImage');
     image.src = RollingDice;
     setTimeout(() => {
       // toggleDiceRollingStatus(false);
-      const diceValue = getRandomDiceValue();
+      const diceValue = getRandomDiceValue(isCrookedDiceSelected);
       if (diceValue === 6 && !isGameStarted) {
         setIsGameStarted(true);
         setPosition(1);
@@ -104,15 +123,15 @@ function App() {
           }
         }
       }
-        setCurrentDiceValue(diceValue);
-        try {
-          const image = document.getElementById('diceImage');
-          image.src = getDiceImage(diceValue);
-          image.style.transform = "scale(0.5)";
-          image.style.marginLeft = "35px";
-        } catch (error) {
-          console.log('cannot find dice element in the DOM');
-        }
+      setCurrentDiceValue(diceValue);
+      try {
+        const image = document.getElementById('diceImage');
+        image.src = getDiceImage(diceValue);
+        image.style.transform = "scale(0.5)";
+        image.style.marginLeft = "35px";
+      } catch (error) {
+        console.log('cannot find dice element in the DOM');
+      }
     }, 2000);
   }
 
@@ -154,7 +173,7 @@ function App() {
         {/* END - ROll the Dice Button */}
         {/* BEGIN - Div to show hte status of the player position */}
         <div>
-        {isGameStarted ?
+          {isGameStarted ?
             <h4 className='successMessage'>Current Position : {position}</h4>
             :
             <h4 className='infoMessage'>{defaultPositionMessage}</h4>
@@ -180,6 +199,29 @@ function App() {
         </div>
         {/* END - Div to show hte status of the player position */}
       </div>
+      {/* BEGIN - Dialog to take input crooked Dice or not*/}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Do you want to choose a Crooked Dice to play the Game ?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            A Crooked dice generates only EVEN numbers
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => toggleIsCrookedDiceSelected(true)} autoFocus>Yes</Button>
+          <Button onClick={() => toggleIsCrookedDiceSelected(false)}>
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* END - Dialog to take input crooked Dice or not*/}
     </div>
   );
 }

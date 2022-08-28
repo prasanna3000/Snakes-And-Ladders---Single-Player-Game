@@ -9,8 +9,11 @@ import DiceImageSix from '../images/six.png';
 // import AvatarImageThree from '../images/avtar3.png';
 import AvatarImageFour from '../images/avatar4.png';
 
-export const getRandomDiceValue = () => {
-    return Math.floor((Math.random() * 6) + 1);
+export const getRandomDiceValue = (isCrookedDiceSelected) => {
+    if(!isCrookedDiceSelected) {
+        return Math.floor((Math.random() * 6) + 1);
+    }
+    return Math.floor((Math.random() * 3) + 1) * 2;
 }
 
 export const generateRandomValueForAvatar = () => {
